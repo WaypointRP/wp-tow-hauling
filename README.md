@@ -10,14 +10,14 @@ Preview: https://youtu.be/oTn4ASd33R8
 ## Overview
 
 Some examples of what you can do with this script:
-    - haul multiple offroad / non street legal vehicles to your destination
-    - haul motorcycle(s) on the back of a pickup truck
-    - haul boats on a trailer
-    - haul multiple vehicles using the car carrier trailer (tr2)
-    - haul cargo on a trailer (crates, pallets, etc)
-    - create a mobile farmers market on the back of a pickup truck
-    - create a mobile firework show on a party bus (with [wp-fireworks](https://backsh00ter.tebex.io/package/5753511))
-    - create immersive jobs where players can haul vehicles or props to a destination
+- haul multiple offroad / non street legal vehicles to your destination
+ - haul motorcycle(s) on the back of a pickup truck
+- haul boats on a trailer
+- haul multiple vehicles using the car carrier trailer (tr2)
+- haul cargo on a trailer (crates, pallets, etc)
+- create a mobile farmers market on the back of a pickup truck
+- create a mobile firework show on a party bus (with [wp-fireworks](https://backsh00ter.tebex.io/package/5753511))
+- create immersive jobs where players can haul vehicles or props to a destination
 
 The scenarios that can be created with this script are limited only by your imagination.
 
