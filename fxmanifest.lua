@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'Waypoint Hauling'
+description 'Waypoint Tow / Hauling'
 author 'BackSH00TER - Waypoint RP'
 version '1.0.0'
 
