@@ -86,5 +86,5 @@ If you want to use notifications, there is a built in framework wrapper around t
 
 ![image](https://github.com/WaypointRP/wp-tow-hauling/assets/18689469/4a00075f-19fa-4a54-9f71-90d2da4c8d46)
 
-
-
+## Credit
+@DonHulieo for providing insipiration and examples for structuring the framework.lua file.
