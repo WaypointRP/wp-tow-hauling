@@ -51,6 +51,8 @@ Repeat steps 1-5 as many times as you like to attach more vehicles/objects.
     - Decide whether you want to allow attaching props with `Config.AllowHaulingProps`.
 3. By default, the commands `/tow` and `/untow` are used to start the actions. You can use the provided events to hook these up in your own way (ex: Radial menu).
     `wp-hauling:client:startTowSelection` and `wp-hauling:client:startUntowSelection`
+
+> Note: If you are using `ox` for any of the Framework options you need to uncomment `@ox_lib/init.lua` in the fxmanifest.lua.
  
 ## Additional Notes
 
