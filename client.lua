@@ -1,7 +1,7 @@
 if Config.EnableTowCommands then
     CreateThread(function()
-        TriggerEvent('chat:addSuggestion', '/tow', 'Start the process to tow/attach a vehicle.')
-        TriggerEvent('chat:addSuggestion', '/untow', 'Start the process to untow a specific attached vehicle.')
+        TriggerEvent("chat:addSuggestion", "/tow", "Start the process to tow/attach a vehicle.")
+        TriggerEvent("chat:addSuggestion", "/untow", "Start the process to untow a specific attached vehicle.")
     end)
 end
 
@@ -25,8 +25,8 @@ local function RequestNetworkControlOfObject(netId, itemEntity)
 end
 
 -- Checks if the vehicle is allowed to be used to tow
----@param vehicle - The vehicle entity to check
----@return boolean - True/false if the vehicle is allowed to be used to tow
+--- @param vehicle - The vehicle entity to check
+--- @return boolean - True/false if the vehicle is allowed to be used to tow
 local function isAllowedTowVehicle(vehicle)
     if Config.AllowAllVehiclesToTow then return true end
 
@@ -44,8 +44,9 @@ end
 -- Draws a marker above the target object that the player is looking at
 -- If the object is hovered, it will draw a yellow marker, once selected it will draw a red marker
 -- This needs to be called every frame to render correctly
----@param targetVehicle - The vehicle entity to draw the marker on
----@param isSelected - boolean - Whether the vehicle had already been selected or is just hovered over
+--- @param targetVehicle - The vehicle entity to draw the marker on
+--- @param isSelected boolean - Whether the vehicle had already been selected or is just hovered over
+--- @param markerType number - The type of marker to draw
 local function DrawMarkerOnTarget(targetVehicle, isSelected, markerType)
     -- local markerType = 0
     local scale = 0.3
@@ -58,8 +59,8 @@ local function DrawMarkerOnTarget(targetVehicle, isSelected, markerType)
     local textureName = nil
     local drawOnEnts = false
     local pos = GetEntityCoords(targetVehicle, true)
-    local colorYellow = { red = 255, green = 255, blue = 0 }
-    local colorRed = { red = 255, green = 50, blue = 0 }
+    local colorYellow = { red = 255, green = 255, blue = 0, }
+    local colorRed = { red = 255, green = 50, blue = 0, }
     local color = colorYellow
     -- If isSelected then use color red, else use color yellow
     if isSelected then color = colorRed end
@@ -69,42 +70,42 @@ end
 
 -- Used by the raycast functions to get the direction the camera is looking
 local function RotationToDirection(rotation)
-	local adjustedRotation = {
+    local adjustedRotation = {
         x = (math.pi / 180) * rotation.x,
-		y = (math.pi / 180) * rotation.y,
-		z = (math.pi / 180) * rotation.z
-	}
+        y = (math.pi / 180) * rotation.y,
+        z = (math.pi / 180) * rotation.z,
+    }
 
-	local direction = {
-		x = -math.sin(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
-		y = math.cos(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
-		z = math.sin(adjustedRotation.x)
-	}
+    local direction = {
+        x = -math.sin(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
+        y = math.cos(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)),
+        z = math.sin(adjustedRotation.x),
+    }
 
-	return direction
+    return direction
 end
 
 -- Uses a RayCast to get the entity, coords, and whether we "hit" something with the raycast
----@param distance - The distance to cast the ray
----@return hit, coords, entity - Whether the raycast hit something, the coords of the hit, and the entity that was hit
+--- @param distance - The distance to cast the ray
+--- @return hit, coords, entity - Whether the raycast hit something, the coords of the hit, and the entity that was hit
 local function RayCastGamePlayCamera(distance)
     local cameraRotation = GetGameplayCamRot()
-	local cameraCoord = GetGameplayCamCoord()
-	local direction = RotationToDirection(cameraRotation)
-	local destination = {
-		x = cameraCoord.x + direction.x * distance,
-		y = cameraCoord.y + direction.y * distance,
-		z = cameraCoord.z + direction.z * distance
-	}
+    local cameraCoord = GetGameplayCamCoord()
+    local direction = RotationToDirection(cameraRotation)
+    local destination = {
+        x = cameraCoord.x + direction.x * distance,
+        y = cameraCoord.y + direction.y * distance,
+        z = cameraCoord.z + direction.z * distance,
+    }
 
-	local _, hit, coords, _, entity = GetShapeTestResult(StartShapeTestRay(cameraCoord.x, cameraCoord.y, cameraCoord.z, destination.x, destination.y, destination.z, -1, PlayerPedId(), 0))
-	return hit, coords, entity
+    local _, hit, coords, _, entity = GetShapeTestResult(StartShapeTestRay(cameraCoord.x, cameraCoord.y, cameraCoord.z, destination.x, destination.y, destination.z, -1, PlayerPedId(), 0))
+    return hit, coords, entity
 end
 
 -- Draws a line and marker at the end of the raycast where the player is looking
----@param coords - The coords to draw the line and marker at
+--- @param coords - The coords to draw the line and marker at
 local function DrawRayCastLine(coords)
-    local color = { r = 37, g = 192, b = 192, a = 200 }
+    local color = { r = 37, g = 192, b = 192, a = 200, }
     local position = GetEntityCoords(PlayerPedId())
 
     if coords.x ~= 0.0 and coords.y ~= 0.0 then
@@ -116,10 +117,10 @@ end
 -- Activates the ray cast mode to get the target object the player is looking at
 -- Listens for keypress to detect when the player has selected the target
 -- Checks if the vehicle is allowed to be used to tow and that the vehicle is not the same as the already selected vehicle
----@param shouldCheckAllowedVehicles - boolean - Whether to check if the vehicle is allowed to be used to tow
----@param otherSelectedVehicle - The vehicle entity that has already been selected
----@param shouldDrawOutline - boolean - Whether to draw an outline on the selected vehicle/object
----@return vehicle - The vehicle entity that the player has selected
+--- @param shouldCheckAllowedVehicles - boolean - Whether to check if the vehicle is allowed to be used to tow
+--- @param otherSelectedVehicle - The vehicle entity that has already been selected
+--- @param shouldDrawOutline - boolean - Whether to draw an outline on the selected vehicle/object
+--- @return vehicle - The vehicle entity that the player has selected
 local function rayCastGetSelectedVehicle(shouldCheckAllowedVehicles, otherSelectedVehicle, shouldDrawOutline)
     local hit, coords, targetObj = RayCastGamePlayCamera(Config.TowDistance)
 
@@ -147,8 +148,8 @@ end
 -- Attaches the targetObject onto the towVehicle in its current position,
 -- respecting both the targetObjects rotation and offset from the towVehicle
 -- If the vehicle + object are not touching, it will not attach them
----@param towVehicle - The vehicle entity that will be doing the towing
----@param targetObject - The vehicle entity that will be towed
+--- @param towVehicle - The vehicle entity that will be doing the towing
+--- @param targetObject - The vehicle entity that will be towed
 local function attachTargetObjectToTowVehicle(towVehicle, targetObject)
     local towNetId = NetworkGetNetworkIdFromEntity(towVehicle)
     local targetNetId = NetworkGetNetworkIdFromEntity(targetObject)
@@ -176,11 +177,10 @@ local function attachTargetObjectToTowVehicle(towVehicle, targetObject)
 
         AttachEntityToEntity(targetObject, towVehicle, 0, offsetCoords.x, offsetCoords.y, offsetCoords.z, newRotX, newRotY, newRotZ, 0, true, true, false, 2, true)
 
-        Notify('Object has been strapped down.', 'success', 5000)
+        Notify("Object has been strapped down.", "success", 5000)
     else
-        Notify('Target object must be touching the tow vehicle in order to be towed', 'error', 7500)
+        Notify("Target object must be touching the tow vehicle in order to be towed", "error", 7500)
     end
-
 end
 
 -- Run a thread to handle selecting the tow vehicle and target vehicle
@@ -206,7 +206,7 @@ local function startTowingSelectMode()
                 end
 
                 towVehicle = rayCastGetSelectedVehicle(true, nil, true)
-            -- STEP 2: Runs a raycast to get the vehicle/object the player wants to be towed
+                -- STEP 2: Runs a raycast to get the vehicle/object the player wants to be towed
             elseif not targetObject then
                 if not hasNotifiedSelectTarget then
                     hasNotifiedSelectTarget = true
@@ -214,7 +214,7 @@ local function startTowingSelectMode()
                 end
 
                 targetObject = rayCastGetSelectedVehicle(false, towVehicle, true)
-            -- STEP 3: Notify the player to press ConfirmVehicleSelectionKey to confirm the selections and complete the tow
+                -- STEP 3: Notify the player to press ConfirmVehicleSelectionKey to confirm the selections and complete the tow
             else
                 if not hasNotifiedConfirm then
                     hasNotifiedConfirm = true
@@ -279,8 +279,8 @@ local function startUnTowSelectMode()
                 Notify("Vehicle is not attached to anything", "error", 3000)
             end
 
-             -- Listen for keypress of exit vehicle selection key to exit out of the loop
-             if (IsControlJustPressed(0, Config.ExitVehicleSelectionKey)) then
+            -- Listen for keypress of exit vehicle selection key to exit out of the loop
+            if (IsControlJustPressed(0, Config.ExitVehicleSelectionKey)) then
                 -- Exit out of the thread and reset any variables
                 isUnTowingSelectModeEnabled = false
             end
@@ -292,10 +292,10 @@ local function startUnTowSelectMode()
     end)
 end
 
-RegisterNetEvent('wp-hauling:client:startTowSelection', function()
+RegisterNetEvent("wp-hauling:client:startTowSelection", function()
     startTowingSelectMode()
 end)
 
-RegisterNetEvent('wp-hauling:client:startUntowSelection', function()
+RegisterNetEvent("wp-hauling:client:startUntowSelection", function()
     startUnTowSelectMode()
 end)

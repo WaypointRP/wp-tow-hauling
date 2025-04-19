@@ -21,7 +21,7 @@ function DrawInstructionalButtons(primaryKey, primaryText, secondaryKey, seconda
 
     PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
     PopScaleformMovieFunctionVoid()
-    
+
     PushScaleformMovieFunction(scaleform, "SET_CLEAR_SPACE")
     PushScaleformMovieFunctionParameterInt(200)
     PopScaleformMovieFunctionVoid()
@@ -29,7 +29,7 @@ function DrawInstructionalButtons(primaryKey, primaryText, secondaryKey, seconda
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(0)
     Button(GetControlInstructionalButton(2, secondaryKey, true)) -- The button to display
-    ButtonMessage(secondaryText) -- the message to display next to it
+    ButtonMessage(secondaryText)                                 -- the message to display next to it
     PopScaleformMovieFunctionVoid()
 
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
