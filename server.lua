@@ -7,3 +7,12 @@ if Config.EnableTowCommands then
         TriggerClientEvent("wp-hauling:client:startUntowSelection", source)
     end)
 end
+
+AddEventHandler("onResourceStart", function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        -- Give the script some time to start
+        Wait(100)
+
+        ValidateOxLibUsage()
+    end
+end)
